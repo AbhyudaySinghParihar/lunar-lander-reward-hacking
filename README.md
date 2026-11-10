@@ -44,23 +44,23 @@ Over an episode, these bonuses add up to just `10 × (end − start)`, so sittin
 
 | Video | What it shows |
 |---|---|
-| [0_random_agent_crash.mp4](videos/0_random_agent_crash.mp4) | Random actions. Crashes in about 1 second (score −131.0) |
-| [1_run1_landing_seed0.mp4](videos/1_run1_landing_seed0.mp4) | Run 1, dice off. Clean landing between the flags (267.8, 426 frames) |
-| [2_run1_ground_stall_seed105.mp4](videos/2_run1_ground_stall_seed105.mp4) | Run 1, dice off, seed 105. Lands at the left flag, then pulses engine 3 until the time limit (120.6, 1,000 frames) |
-| [3_run3_dice_off_clean_landing_seed100.mp4](videos/3_run3_dice_off_clean_landing_seed100.mp4) | Run 3, dice off. Looks perfect: lands straight in the centre (233.6, 327 frames) |
-| [4_run3_dice_on_reward_hacking_seed100.mp4](videos/4_run3_dice_on_reward_hacking_seed100.mp4) | The same Run 3 agent and start, dice on. Lands, then farms the hover bonus until the time limit (1,000 frames) |
+| [0_random_agent_crash.mp4](0_random_agent_crash.mp4) | Random actions. Crashes in about 1 second (score −131.0) |
+| [1_run1_landing_seed0.mp4](1_run1_landing_seed0.mp4) | Run 1, dice off. Clean landing between the flags (267.8, 426 frames) |
+| [2_run1_ground_stall_seed105.mp4](2_run1_ground_stall_seed105.mp4) | Run 1, dice off, seed 105. Lands at the left flag, then pulses engine 3 until the time limit (120.6, 1,000 frames) |
+| [3_run3_dice_off_clean_landing_seed100.mp4](3_run3_dice_off_clean_landing_seed100.mp4) | Run 3, dice off. Looks perfect: lands straight in the centre (233.6, 327 frames) |
+| [4_run3_dice_on_reward_hacking_seed100.mp4](4_run3_dice_on_reward_hacking_seed100.mp4) | The same Run 3 agent and start, dice on. Lands, then farms the hover bonus until the time limit (1,000 frames) |
 
 Videos 3 and 4 are the core result: the same trained agent on the same start, tested two ways.
 
 ## Trained models
 
-The four pilot agents are in `models/`. Load one with Stable-Baselines3 and test it:
+The four pilot agents are the `run*.zip` files in this repository. Load one with Stable-Baselines3 and test it:
 
 ```python
 from stable_baselines3 import PPO
 from evaluate import evaluate
 
-model = PPO.load("models/run3_hover_ppo_hover.zip")
+model = PPO.load("run3_hover_ppo_hover.zip")
 evaluate(model, det=True)    # dice off
 evaluate(model, det=False)   # dice on
 ```
@@ -88,9 +88,9 @@ evaluate(model, det=False)   # dice on
 | `train.py` | Trains one agent under a chosen reward condition |
 | `evaluate.py` | Tests agents with dice off and dice on, inspects one episode, records videos |
 | `check_improvement_bonus.py` | Checks that the improvement bonus equals end minus start |
-| `models/` | The four trained pilot agents |
-| `videos/` | Recorded episodes from the pilot |
-| `docs/Lunar_Lander_Research_Glossary.pdf` | Plain-language glossary of the terms used, with the pilot results |
+| `run1_…` to `run4_….zip` | The four trained pilot agents |
+| `0_…` to `4_….mp4` | Recorded episodes from the pilot |
+| `Lunar_Lander_Research_Glossary.pdf` | Plain-language glossary of the terms used, with the pilot results |
 
 ## How to run
 
