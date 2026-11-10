@@ -1,8 +1,15 @@
 # Lunar Lander: Reward Shaping and Hidden Reward Hacking
 
-I trained a PPO agent to land a rocket in Gymnasium's **LunarLander-v3**, then changed the reward to see how the agent's behaviour changed. One "sensible" bonus got hacked: the agent landed, then kept pulsing its side engines so the episode never ended, farming points until the time limit. The standard way of testing agents (deterministic evaluation) **completely hid this hack**. It only showed up when the agent was tested the way it was trained, with sampled actions.
+I trained a PPO agent to land a rocket in Gymnasium's **LunarLander-v3**, then changed the reward to see how the agent's behavior changed. One "sensible" bonus got hacked: the agent landed, then kept pulsing its side engines so the episode never ended, farming points until the time limit. The standard way of testing agents (deterministic evaluation) **completely hid this hack**. It only showed up when the agent was tested the way it was trained, with sampled actions.
 
 This repository has the code and the results of that pilot study.
+
+## Summary
+
+- **Trained** four PPO agents under four reward designs, 1,000,000 timesteps each.
+- **Caught** reward hacking: a hover bonus meant to encourage gentle landings taught the agent to sit on the ground and farm points until the time limit.
+- **Showed** that deterministic evaluation hid the hack (0 of 20 stalls), while sampled actions exposed it (16 of 20).
+- **Fixed** it with potential-based reward shaping and **verified** the fix with `check_improvement_bonus.py`.
 
 ## Results
 
@@ -38,7 +45,7 @@ bonus = 10 × (potential(now) − potential(previous frame))
 potential = −(|tilt| + |sideways speed| + |vertical speed|)
 ```
 
-Over an episode, these bonuses add up to just `10 × (end − start)`, so sitting still earns nothing. `check_improvement_bonus.py` checks this. On our test episode, both numbers came out at 11.1195. This is potential-based reward shaping (Ng, Harada and Russell, 1999). Run 4 never stalled in either mode and scored highest.
+Over an episode, these bonuses add up to just `10 × (end − start)`, so sitting still earns nothing. `check_improvement_bonus.py` checks this. On my test episode, both numbers came out at 11.1195. This is potential-based reward shaping (Ng, Harada and Russell, 1999). Run 4 never stalled in either mode and scored highest.
 
 ## Videos
 
@@ -47,7 +54,7 @@ Over an episode, these bonuses add up to just `10 × (end − start)`, so sittin
 | [0_random_agent_crash.mp4](0_random_agent_crash.mp4) | Random actions. Crashes in about 1 second (score −131.0) |
 | [1_run1_landing_seed0.mp4](1_run1_landing_seed0.mp4) | Run 1, dice off. Clean landing between the flags (267.8, 426 frames) |
 | [2_run1_ground_stall_seed105.mp4](2_run1_ground_stall_seed105.mp4) | Run 1, dice off, seed 105. Lands at the left flag, then pulses engine 3 until the time limit (120.6, 1,000 frames) |
-| [3_run3_dice_off_clean_landing_seed100.mp4](3_run3_dice_off_clean_landing_seed100.mp4) | Run 3, dice off. Looks perfect: lands straight in the centre (233.6, 327 frames) |
+| [3_run3_dice_off_clean_landing_seed100.mp4](3_run3_dice_off_clean_landing_seed100.mp4) | Run 3, dice off. Looks perfect: lands straight in the center (233.6, 327 frames) |
 | [4_run3_dice_on_reward_hacking_seed100.mp4](4_run3_dice_on_reward_hacking_seed100.mp4) | The same Run 3 agent and start, dice on. Lands, then farms the hover bonus until the time limit (1,000 frames) |
 
 Videos 3 and 4 are the core result: the same trained agent on the same start, tested two ways.
